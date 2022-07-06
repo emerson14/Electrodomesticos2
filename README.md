@@ -1,2 +1,5 @@
-# Electrodomesticos2
-Ejercicio practico de un almacen de electrodomesticos
+# Electrodomesticos
+Pagina de electrodomesticos
+ 
+ https://emerson14.github.io/Electrodomesticos/
+ 

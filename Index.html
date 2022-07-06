@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+    <title>electrodomesticos</title>
+</head>
+<body >
+
+    <div id="app" >
+        <header class="sticky-top">
+            <nav id="navbar" class="navbar navbar-expand-lg bg-dark navbar-dark ">
+                <div class="container">
+                    <a class="navbar-brand" href="index.html">
+                     
+                      
+                        <span>Electrodomesticos</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                            </li>
+                            
+                          
+                    
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a @click="cartClick" class="nav-link text-highlightedd" href="#" data-bs-toggle="modal" data-bs-target="#carrito">Cart <i class="fas fa-shopping-cart"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- HEADER -->
+
+        
+            <!-- MAIN -->
+            <section id="main">
+                
+            </section>
+        
+   
+
+
+     <!-- floating cart button -->
+     <section id="floating-cart-btn">
+        <div class="btn-container fixed-bottom">
+            <div class="cart-float-btn">
+                <a @click="cartClick" href="#" class="floating-cart text-center" data-bs-toggle="modal" data-bs-target="#carrito"><i class="fas fa-shopping-cart"></i>  <strong v-text="fcartN" class="text-danger"></strong></a>
+            </div>
+        </div>
+    </section>
+    <!-- /floating cart button -->
+
+
+       <!-- products -->
+       <section id="products" class="mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center text-uppercase">
+                    <h1 class="menu-title" id="hamburguers">Electrodomesticos</h1>
+                    <li class="nav-item">
+                        <select class="form-select" aria-label="Default select example" v-model="categorie" @click="searchFor">
+                              <option value="all">todos los productos</option>
+                              <option value="TV">televisores</option>
+                              <option value="freidora">freidoras de aire</option>
+                              <option value="nevera">neveras</option>
+                              <option value="lavadora">lavadoras</option>
+                            </select>
+                      </li>
+                </div>
+            </div>
+            <!-- Products here -->
+            <!-- hamburgers -->
+            <div class="row" v-if="products.length">
+                <div class="col-md-6 col-lg-3 mt-3 mb-4" v-for="(item, index) in products" :key="item.id">
+                    <div class="card  h-100  " >
+                        <img :src="item.img" class="card-img-top" alt="hb1" data-bs-toggle="modal" :data-bs-target="item.modalw">
+                        <div class="card-body flex-column justify-content-between">
+                            <h5 class="card-title" v-text="item.name">Electrodomesticos</h5>
+                            <p class="card-text"><strong  v-text="item.desc"></strong></p>
+                            <h4 class="text-center mb-3"><strong>$ </strong> <span><strong v-text="item.price"></strong></span></h4>
+                            <div class="row">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-dark"><button @click="minusbtn(item)" type="button" class="btn btn-dark"><i class="fas fa-minus"></i></button></span>
+                                    <input type="number" min="0" max="20" class="form-control" placeholder="Cantidad" v-model.number="item.order_amount">
+                                    <span class="input-group-text bg-dark"><button @click="plusbtn(item)" type="button" class="btn btn-dark"><i class="fas fa-plus"></i></button></span>
+                                </div>
+                                <div class="btnadd"><button @click="addToCart(item)" type="button" class="col-12 btn btn-dark">Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div id="modals">
+                        <div  class="modal fade" :id="item.modal_id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="exampleModalLabel" v-text="item.name"></h5>
+                                        <button @click="closemodal(item)" type="button" class="btn btn-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img :src="item.img" class="card-img-top" alt="hd4">
+                                        <h4>Descripción:</h4>
+                                        <p v-text="item.descmodal"></p>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text bg-dark"><button @click="minusbtn(item)" type="button" class="btn btn-dark"><i class="fas fa-minus"></i></button></span>
+                                            <input type="number" min="0" max="20" class="form-control" placeholder="Cantidad" v-model.number="item.order_amount">
+                                            <span class="input-group-text bg-dark"><button @click="plusbtn(item)" type="button" class="btn btn-dark"><i class="fas fa-plus"></i></button></span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button @click="addToCart(item)" type="button"><strong>AGREGRAR</strong></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+
+            
+
+            
+        </div>
+    </section>
+
+
+
+</div>
+    
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.0-alpha.4/vue.js"></script>
+<script src="js/main.js"></script>
+</html>
